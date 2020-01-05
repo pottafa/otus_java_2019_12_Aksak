@@ -1,1 +1,4 @@
-# otus_java_2019_12_Aksak
+# Aksak Aleksandr Anatolyevich (Аксак Александр Анатольевич)
+# pottafa@gmail.com
+# Otus Java
+# 2019_12
