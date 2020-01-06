@@ -1,3 +1,5 @@
+package ru.otus.homework01;
+
 import com.google.common.base.Splitter;
 
 public class HelloOtus {

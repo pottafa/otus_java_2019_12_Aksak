@@ -33,7 +33,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>HelloOtus</mainClass>
+                            <mainClass>ru.otus.homework01.HelloOtus</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
