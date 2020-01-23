@@ -3,10 +3,9 @@ package ru.otus.homework.DIYCollections;
 import java.util.*;
 
 public class DIYArrayList<T> implements List<T> {
-
-   private int size = 10;
-   private int actualSize = 0;
-    private Object[] array = new Object[size];
+    private static final int INITIAL_CAPACITY = 10;
+    private int actualSize = 0;
+    private Object[] array = new Object[INITIAL_CAPACITY];
 
 
     @Override
@@ -31,8 +30,8 @@ public class DIYArrayList<T> implements List<T> {
 
     @Override
     public Object[] toArray() {
- Object[] returnArray = new Object[actualSize];
-System.arraycopy(array, 0, returnArray, 0, actualSize);
+        Object[] returnArray = new Object[actualSize];
+        System.arraycopy(array, 0, returnArray, 0, actualSize);
         return returnArray;
 
     }
@@ -42,16 +41,25 @@ System.arraycopy(array, 0, returnArray, 0, actualSize);
         throw new UnsupportedOperationException();
     }
 
+
+    private void ifIndexWithingRange(int index) {
+        if (index >= actualSize || index < 0) {
+            throw new IndexOutOfBoundsException("Size of the DIYArrayList is " + actualSize + ". Index of the element " + index + " is out of the range");
+        }
+    }
+
     @Override
     public boolean add(T t) {
-       if(array.length == actualSize) {
-           array = Arrays.copyOf(array, size<<1);
-           size = array.length;
-       }
-           array[actualSize] = t;
-           actualSize+=1;
-           return true;
-       }
+        if (array.length == actualSize)
+            array = arrayGrowing();
+        array[actualSize] = t;
+        actualSize++;
+        return true;
+    }
+
+    private Object[] arrayGrowing() {
+        return Arrays.copyOf(array, array.length << 1);
+    }
 
 
     @Override
@@ -91,6 +99,7 @@ System.arraycopy(array, 0, returnArray, 0, actualSize);
 
     @Override
     public T get(int index) {
+        ifIndexWithingRange(index);
         return (T) array[index];
     }
 
@@ -122,8 +131,9 @@ System.arraycopy(array, 0, returnArray, 0, actualSize);
     @Override
     public ListIterator<T> listIterator() {
         return new ListIterator<>() {
-           private int indexOfCurrentElement = 0;
-           private int lastIndex = 0;
+            private int indexOfCurrentElement = 0;
+            private int lastIndex = 0;
+
             @Override
             public boolean hasNext() {
                 return false;
@@ -131,6 +141,7 @@ System.arraycopy(array, 0, returnArray, 0, actualSize);
 
             @Override
             public T next() {
+                ifIndexWithingRange(indexOfCurrentElement);
                 lastIndex = indexOfCurrentElement;
                 return (T) array[indexOfCurrentElement++];
             }
@@ -162,7 +173,7 @@ System.arraycopy(array, 0, returnArray, 0, actualSize);
 
             @Override
             public void set(T t) {
-array[lastIndex] = t;
+                array[lastIndex] = t;
             }
 
             @Override
