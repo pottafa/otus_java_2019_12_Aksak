@@ -1,6 +1,6 @@
 package ru.otus.homework;
 
-import ru.otus.homework.DIYCollections.DIYArrayList;
+import ru.otus.homework.diyCollections.DIYArrayList;
 
 import java.util.*;
 
