@@ -58,7 +58,7 @@ public class DIYArrayList<T> implements List<T> {
 
     private void growIfNeed() {
         if (array.length == actualSize)
-        array = Arrays.copyOf(array, array.length << 1);
+            array = Arrays.copyOf(array, array.length << 1);
     }
 
 
