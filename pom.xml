@@ -16,6 +16,7 @@
     </developers>
     <modules>
         <module>hw01-maven</module>
+        <module>hw04-Proxy</module>
     </modules>
 
 
