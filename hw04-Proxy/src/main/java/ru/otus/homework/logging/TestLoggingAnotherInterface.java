@@ -1,9 +1,8 @@
 package ru.otus.homework.logging;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public interface TestLoggingAnotherInterface extends Proxibale {
+public interface TestLoggingAnotherInterface {
     void anotherCalculation(int param);
 
     void anotherOverloadCalculation(int param);

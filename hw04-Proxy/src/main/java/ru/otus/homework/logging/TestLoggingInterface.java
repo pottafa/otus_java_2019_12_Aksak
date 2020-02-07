@@ -1,6 +1,6 @@
 package ru.otus.homework.logging;
 
-public interface TestLoggingInterface extends Proxibale {
+public interface TestLoggingInterface {
     void calculation(int param);
 
     void overloadCalculation(int param);
