@@ -15,17 +15,23 @@ public class ProxySample {
         for (Method method : cl.getMethods()) {
             for (Annotation annotation : method.getDeclaredAnnotations()) {
                 if (annotation.annotationType().equals(Log.class)) {
-                    methods.add(method.getName() + Arrays.toString(method.getParameters()));
+                    String methodSignature = getMethodSignature(method);
+                    methods.add(methodSignature);
                 }
             }
         }
         if (methods.size() == 0) return obj;
-        return (T) Proxy.newProxyInstance(ProxySample.class.getClassLoader(), cl.getInterfaces(), (proxy, method, args) -> {
-            if (methods.contains(method.getName() + Arrays.toString(method.getParameters()))) {
+        return (T) Proxy.newProxyInstance(cl.getClassLoader(), cl.getInterfaces(), (proxy, method, args) -> {
+            if (methods.contains(getMethodSignature(method))) {
                 String argsStr = Arrays.toString(args);
                 System.out.println("executed method:" + method.getName() + ", parameters: " + argsStr.substring(1, argsStr.length() - 1));
             }
             return method.invoke(obj, args);
         });
     }
+
+    private static String getMethodSignature(Method method) {
+        return method.getName() + Arrays.toString(method.getParameters());
+    }
 }
+
