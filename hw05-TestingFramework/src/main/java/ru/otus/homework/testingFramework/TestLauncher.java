@@ -1,60 +1,48 @@
 package ru.otus.homework.testingFramework;
 
-import java.lang.reflect.Constructor;
+import ru.otus.homework.testingFramework.annotations.*;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TestLauncher {
 
-    public static void launchTests(String className) throws ClassNotFoundException, InvocationTargetException, IllegalAccessException, InstantiationException, NoSuchMethodException {
-        Class<?> cl = Class.forName(className);
-        Constructor<?> constructor = cl.getConstructor();
+    public static Map<String, Integer> launchTests(String className) throws ClassNotFoundException, NoSuchMethodException {
+        var cl = Class.forName(className);
+        var constructor = cl.getConstructor();
+        var statistics = new HashMap<String, Integer>();
 
-        Method before = null;
-        Method after = null;
-        List<Method> test = new ArrayList<>();
-        Method afterAll = null;
-        Method beforeAll = null;
-
-        for (Method method : cl.getMethods()) {
-            int methodModifiers = method.getModifiers();
-            if (method.isAnnotationPresent(Before.class)) {
-                before = method;
-            } else if (method.isAnnotationPresent(After.class)) {
-                after = method;
-            } else if (method.isAnnotationPresent(Test.class)) {
-                test.add(method);
-            } else if (method.isAnnotationPresent(BeforeAll.class) && Modifier.isStatic(methodModifiers)) {
-                beforeAll = method;
-            } else if (method.isAnnotationPresent(AfterAll.class) && Modifier.isStatic(methodModifiers)) {
-                afterAll = method;
-            }
+        try {
+            TestsHandler handler = createHandler(cl.getMethods());
+            handler.execute(constructor, statistics);
+        } catch (InvocationTargetException e) {
+            e.getCause().printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        if (test.size() == 0) System.out.println("There is no methods to test");
-        else {
-            Collections.shuffle(test);
-            int testsPassed = 0;
-            int testsFailed = 0;
-            for (Method testMethod : test) {
-                Object objOfClass = constructor.newInstance();
-                if (beforeAll != null) beforeAll.invoke(null);
-                try {
-                    if (before != null) before.invoke(objOfClass);
-                    testMethod.invoke(objOfClass);
-                    testsPassed += 1;
-                    System.out.println(testMethod.getName() + " passed \n");
-                } catch (Exception exception) {
-                    testsFailed += 1;
-                    System.out.println(testMethod.getName() + " failed \n" + exception.getCause() + "\n" + Arrays.toString(exception.getStackTrace()) + "\n");
-                } finally {
-                    if (after != null) after.invoke(objOfClass);
-                }
-            }
-            if (afterAll != null) afterAll.invoke(null);
-            System.out.println("Tests failed: " + testsFailed + ", passed: " + testsPassed + " of " + test.size() + " tests \n");
-        }
+        if (statistics.size() != 0) System.out.println(statistics);
+        return statistics;
     }
 
+    private static TestsHandler createHandler(Method[] methodsToSort) throws TestingException {
+        var handler = new TestsHandler();
+        for (Method method : methodsToSort) {
+            int methodModifiers = method.getModifiers();
+            if (method.isAnnotationPresent(Before.class)) {
+                handler.setBefore(method);
+            } else if (method.isAnnotationPresent(After.class)) {
+                handler.setAfter(method);
+            } else if (method.isAnnotationPresent(Test.class)) {
+                handler.addTest(method);
+            } else if (method.isAnnotationPresent(BeforeAll.class) && Modifier.isStatic(methodModifiers)) {
+                handler.setBeforeAll(method);
+            } else if (method.isAnnotationPresent(AfterAll.class) && Modifier.isStatic(methodModifiers)) {
+                handler.setAfterAll(method);
+            }
+        }
+        return handler;
+    }
 }

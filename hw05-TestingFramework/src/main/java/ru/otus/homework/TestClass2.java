@@ -1,6 +1,8 @@
 package ru.otus.homework;
 
-import ru.otus.homework.testingFramework.*;
+import ru.otus.homework.testingFramework.annotations.AfterAll;
+import ru.otus.homework.testingFramework.annotations.Before;
+import ru.otus.homework.testingFramework.annotations.Test;
 
 public class TestClass2 {
 
@@ -20,27 +22,21 @@ public class TestClass2 {
 
     @Before
     public void setUp() {
-        System.out.println("Before method starts");
+
     }
 
     @Test
     public void test2() {
-        System.out.println("Tests 2 starts");
-        Object object = null;
-        System.out.println(object.toString());
+        throw new ArrayIndexOutOfBoundsException();
     }
 
     public void test3() {
-        System.out.println("Tests 3 starts");
-        Object object = null;
-        System.out.println(object.toString());
+        throw new RuntimeException();
     }
 
     @Test
     public void test4() {
-        System.out.println("Tests 4 starts");
-        Object object = null;
-        System.out.println(object.toString());
+        throw new UnsupportedOperationException();
     }
 
     public void tearDown() {

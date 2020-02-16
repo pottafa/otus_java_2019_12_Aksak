@@ -1,6 +1,6 @@
 package ru.otus.homework;
 
-import ru.otus.homework.testingFramework.*;
+import ru.otus.homework.testingFramework.annotations.*;
 
 public class TestClass {
     @BeforeAll
@@ -28,6 +28,7 @@ public class TestClass {
     @After
     public void tearDown() {
         System.out.println("After method starts");
+        Object object = null;
     }
 
     @AfterAll
