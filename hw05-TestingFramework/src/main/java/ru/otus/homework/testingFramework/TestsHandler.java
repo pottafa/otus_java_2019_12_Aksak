@@ -52,13 +52,7 @@ class TestsHandler {
           e.getCause().printStackTrace();
           continue;
         } finally {
-          try {
-            invokeAfter(classObject);
-          } catch (Exception e) {
-            statistics.merge("Tests failed: ", 1, Integer::sum);
-            e.getCause().printStackTrace();
-            continue;
-          }
+          invokeAfter(statistics, classObject);
         }
         statistics.merge("Tests passed: ", 1, Integer::sum);
       }
@@ -70,12 +64,17 @@ class TestsHandler {
     }
   }
 
-  private void invokeBefore(Object classObject, Method before) throws IllegalAccessException, InvocationTargetException {
-    if (before != null) before.invoke(classObject);
+  private void invokeAfter(Map<String, Integer> statistics, Object classObject) {
+    try {
+      if (after != null) after.invoke(classObject);
+    } catch (Exception e) {
+      statistics.merge("Tests failed: ", 1, Integer::sum);
+      e.getCause().printStackTrace();
+    }
   }
 
-  private void invokeAfter(Object classObject) throws IllegalAccessException, InvocationTargetException {
-    if (after != null) after.invoke(classObject);
+  private void invokeBefore(Object classObject, Method before) throws IllegalAccessException, InvocationTargetException {
+    if (before != null) before.invoke(classObject);
   }
 
   private void invokeAfterAll() {
