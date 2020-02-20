@@ -18,6 +18,7 @@
         <module>hw01-maven</module>
         <module>hw02-DIYArrayList</module>
         <module>hw03-GC</module>
+        <module>hw05-TestingFramework</module>
     </modules>
 
 
