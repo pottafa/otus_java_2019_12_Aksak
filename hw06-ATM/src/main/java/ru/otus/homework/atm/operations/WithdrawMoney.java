@@ -1,22 +1,22 @@
-package ru.otus.homework.atm;
+package ru.otus.homework.atm.operations;
+
+import ru.otus.homework.atm.ATM;
+import ru.otus.homework.atm.exceptions.AtmException;
+import ru.otus.homework.atm.Banknote;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class WithdrawMoney implements Operation<Banknote[]> {
-    private final ATM atm;
+public class WithdrawMoney implements AtmOperation<Banknote[]> {
     private int requestedMoney;
-    private final Map<Banknote, Integer> cells;
 
-    public WithdrawMoney(ATM atm, int requestedMoney) {
-        this.atm = atm;
+    public WithdrawMoney(int requestedMoney) {
         this.requestedMoney = requestedMoney;
-        cells = this.atm.getCells();
     }
 
     @Override
-    public Banknote[] execute() throws AtmException {
+    public Banknote[] execute(ATM atm, Map<Banknote, Integer> cells) throws AtmException {
         if (requestedMoney <= 0) throw new AtmException("Impossible to give this amount of money: " + requestedMoney);
         int remainingRequestedAmount = requestedMoney;
         List<Banknote> result = new ArrayList<>();
