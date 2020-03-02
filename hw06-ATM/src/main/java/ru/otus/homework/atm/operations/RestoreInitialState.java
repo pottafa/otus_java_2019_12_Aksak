@@ -1,13 +1,11 @@
 package ru.otus.homework.atm.operations;
 
-import ru.otus.homework.atm.ATM;
-
-import java.util.Map;
+import ru.otus.homework.atm.AtmImpl;
 
 public class RestoreInitialState implements AtmOperation, DepartmentOperation {
     @Override
-    public Boolean execute(ATM atm, Map cells) {
-        atm.restoreInitState();
+    public Boolean execute(AtmImpl atmImpl) {
+        atmImpl.restoreInitState();
         return true;
     }
 }

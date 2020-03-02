@@ -3,25 +3,29 @@ package ru.otus.homework.atm.operations;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ru.otus.homework.atm.ATM;
+import ru.otus.homework.atm.AtmImpl;
 import ru.otus.homework.atm.Banknote;
 import ru.otus.homework.atm.Department;
 import ru.otus.homework.atm.exceptions.AtmException;
-import ru.otus.homework.atm.exceptions.DepartamentException;
+
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class GetBalanceTest {
     Department department;
-    ATM atm;
+    AtmImpl atmImpl;
     int initialBalance;
 
     @BeforeEach
-    void setUp() throws DepartamentException, AtmException {
+    void setUp() throws AtmException {
         department = new Department();
-        atm = department.getAtm();
-        atm.addOperation(new GetBalance());
-        initialBalance = atm.execute();
+        atmImpl = department.getAtmBuilder()
+                .fiveTHousand(22)
+                .thousand(111)
+                .build();
+        atmImpl.addOperation(new GetBalance());
+        initialBalance = atmImpl.execute();
     }
 
     @DisplayName("Balance is zero")
@@ -29,11 +33,11 @@ class GetBalanceTest {
     void zeroBalance() throws AtmException {
 
 
-        atm.addOperation(new WithdrawMoney(initialBalance));
-        atm.execute();
+        atmImpl.addOperation(new WithdrawMoney(initialBalance));
+        atmImpl.execute();
 
-        atm.addOperation(new GetBalance());
-        int finalBalance = atm.execute();
+        atmImpl.addOperation(new GetBalance());
+        int finalBalance = atmImpl.execute();
 
         assertEquals(0, finalBalance);
     }
@@ -41,13 +45,13 @@ class GetBalanceTest {
     @DisplayName("Ordinary request")
     @Test
     void ordinaryBalance() throws AtmException {
-        AtmOperation putMoney = new PutMoney(Banknote.FIVE_HUNDRED, Banknote.FIVE_THOUSAND, Banknote.HUNDRED, Banknote.FIFTY, Banknote.THOUSAND, Banknote.FIVE_HUNDRED);
-        atm.addOperation(putMoney);
-        atm.execute();
+        AtmOperation putMoney = new PutMoney(Map.of(Banknote.FIVE_THOUSAND, 1, Banknote.THOUSAND, 2, Banknote.HUNDRED, 1, Banknote.FIFTY, 1));
+        atmImpl.addOperation(putMoney);
+        atmImpl.execute();
 
         AtmOperation getBalance = new GetBalance();
-        atm.addOperation(getBalance);
-        int balance = atm.execute();
+        atmImpl.addOperation(getBalance);
+        int balance = atmImpl.execute();
 
         assertEquals(initialBalance + 7150, balance);
     }

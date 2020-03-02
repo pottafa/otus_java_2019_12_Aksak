@@ -3,77 +3,92 @@ package ru.otus.homework.atm.operations;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ru.otus.homework.atm.ATM;
+import ru.otus.homework.atm.AtmImpl;
 import ru.otus.homework.atm.Banknote;
 import ru.otus.homework.atm.Department;
 import ru.otus.homework.atm.exceptions.AtmException;
-import ru.otus.homework.atm.exceptions.DepartamentException;
+
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RestoreInitialStateTest {
     Department department;
-    ATM atm1;
-    ATM atm2;
-    ATM atm3;
-    ATM atm4;
+    AtmImpl atmImpl1;
+    AtmImpl atmImpl2;
+    AtmImpl atmImpl3;
+    AtmImpl atmImpl4;
     int atm1Balance;
     int atm2Balance;
     int atm3Balance;
     int atm4Balance;
 
     @BeforeEach
-    void setUp() throws DepartamentException, AtmException {
+    void setUp() throws AtmException {
         department = new Department();
-        atm1 = department.getAtm();
-        atm2 = department.getAtm();
-        atm3 = department.getAtm();
-        atm4 = department.getAtm();
+        atmImpl1 = department.getAtmBuilder()
+                .fifty(1000)
+                .hundred(1000)
+                .fiveHundred(1000)
+                .thousand(1000)
+                .fiveTHousand(1000)
+                .build();
+        atmImpl2 = department.getAtmBuilder()
+                .fifty(2000)
+                .hundred(2000)
+                .fiveHundred(2000)
+                .thousand(2000)
+                .fiveTHousand(2000)
+                .build();
+        atmImpl3 = department.getAtmBuilder()
+                .hundred(1000)
+                .fiveHundred(1000)
+                .fiveTHousand(1000)
+                .build();
+        atmImpl4 = department.getAtmBuilder().build();
 
         AtmOperation getBalance = new GetBalance();
-        atm1.addOperation(getBalance);
-        atm1Balance = atm1.execute();
+        atmImpl1.addOperation(getBalance);
+        atm1Balance = atmImpl1.execute();
 
-        atm2.addOperation(getBalance);
-        atm2Balance = atm2.execute();
+        atmImpl2.addOperation(getBalance);
+        atm2Balance = atmImpl2.execute();
 
-        atm3.addOperation(getBalance);
-        atm3Balance = atm3.execute();
+        atmImpl3.addOperation(getBalance);
+        atm3Balance = atmImpl3.execute();
 
-        atm4.addOperation(getBalance);
-        atm4Balance = atm4.execute();
+        atmImpl4.addOperation(getBalance);
+        atm4Balance = atmImpl4.execute();
     }
-@DisplayName("Restoring 4 atm to initial state")
+
+    @DisplayName("Restoring 4 atm to initial state")
     @Test
     void execute() throws AtmException {
-        atm1.addOperation(new PutMoney(Banknote.FIVE_HUNDRED, Banknote.FIVE_THOUSAND, Banknote.HUNDRED, Banknote.FIFTY, Banknote.THOUSAND, Banknote.FIVE_HUNDRED));
-        atm1.execute();
+        atmImpl1.addOperation(new PutMoney(Map.of(Banknote.FIVE_THOUSAND, 1, Banknote.THOUSAND, 2, Banknote.HUNDRED, 1, Banknote.FIFTY, 1)));
+        atmImpl1.execute();
 
-        atm2.addOperation(new PutMoney(Banknote.FIVE_HUNDRED, Banknote.FIVE_THOUSAND, Banknote.HUNDRED, Banknote.FIFTY, Banknote.THOUSAND, Banknote.FIVE_HUNDRED, Banknote.FIVE_HUNDRED, Banknote.FIVE_THOUSAND, Banknote.HUNDRED, Banknote.FIFTY, Banknote.THOUSAND, Banknote.FIVE_HUNDRED));
-        atm2.execute();
+        atmImpl2.addOperation(new PutMoney(Map.of(Banknote.FIVE_THOUSAND, 300, Banknote.THOUSAND, 222, Banknote.HUNDRED, 12, Banknote.FIFTY, 1)));
+        atmImpl2.execute();
 
-        atm3.addOperation(new PutMoney(Banknote.FIVE_HUNDRED, Banknote.FIVE_THOUSAND, Banknote.HUNDRED, Banknote.FIFTY, Banknote.THOUSAND, Banknote.FIVE_HUNDRED, Banknote.FIVE_HUNDRED));
-        atm3.execute();
-
-        atm4.addOperation(new WithdrawMoney(atm4Balance));
-        atm4.execute();
+        atmImpl3.addOperation(new PutMoney(Map.of(Banknote.FIVE_THOUSAND, 11111, Banknote.THOUSAND, 22, Banknote.HUNDRED, 2221, Banknote.FIFTY, 1111)));
+        atmImpl3.execute();
 
         department.event(new RestoreInitialState());
 
         AtmOperation getBalance = new GetBalance();
-        atm1.addOperation(getBalance);
-        int atm1BalanceAfter = atm1.execute();
+        atmImpl1.addOperation(getBalance);
+        int atm1BalanceAfter = atmImpl1.execute();
 
-        atm2.addOperation(getBalance);
-        int atm2BalanceAfter = atm2.execute();
+        atmImpl2.addOperation(getBalance);
+        int atm2BalanceAfter = atmImpl2.execute();
 
-        atm3.addOperation(getBalance);
-        int atm3BalanceAfter = atm3.execute();
+        atmImpl3.addOperation(getBalance);
+        int atm3BalanceAfter = atmImpl3.execute();
 
-        atm4.addOperation(getBalance);
-        int atm4BalanceAfter = atm4.execute();
-int overallBalanceBefore = atm1Balance+atm2Balance+atm3Balance+atm4Balance;
-int overallBalanceAfter = atm1BalanceAfter + atm2BalanceAfter + atm3BalanceAfter + atm4BalanceAfter;
+        atmImpl4.addOperation(getBalance);
+        int atm4BalanceAfter = atmImpl4.execute();
+        int overallBalanceBefore = atm1Balance + atm2Balance + atm3Balance + atm4Balance;
+        int overallBalanceAfter = atm1BalanceAfter + atm2BalanceAfter + atm3BalanceAfter + atm4BalanceAfter;
 
         assertEquals(overallBalanceBefore, overallBalanceAfter);
 

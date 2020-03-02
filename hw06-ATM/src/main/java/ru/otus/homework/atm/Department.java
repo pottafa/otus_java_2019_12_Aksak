@@ -1,7 +1,6 @@
 package ru.otus.homework.atm;
 
 import ru.otus.homework.atm.exceptions.AtmException;
-import ru.otus.homework.atm.exceptions.DepartamentException;
 import ru.otus.homework.atm.operations.DepartmentOperation;
 import ru.otus.homework.atm.operations.GetBalance;
 import ru.otus.homework.atm.operations.AtmOperation;
@@ -10,30 +9,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Department {
-    private final List<ATM> atmsListeners = new ArrayList<>();
-    private final AtmPool pool;
+    private final List<AtmImpl> atmsListeners = new ArrayList<>();
 
-    public Department() throws AtmException {
-        pool = new AtmPool(20, new AtmFactory(), this);
+    public void addListener(AtmImpl atmImplListener) {
+        atmsListeners.add(atmImplListener);
     }
 
-    public void addListener(ATM atmListener) {
-        atmsListeners.add(atmListener);
+    public void removeListener(AtmImpl atmImplListener) {
+        atmsListeners.remove(atmImplListener);
     }
 
-    public void removeListener(ATM atmListener) {
-        atmsListeners.remove(atmListener);
-    }
-
-    public ATM getAtm() throws DepartamentException {
-        return pool.getAtm();
+    public AtmBuilder getAtmBuilder() {
+        return new AtmBuilder(this);
     }
 
     public void event(DepartmentOperation atmOperation) {
-        atmsListeners.forEach(atm -> {
-            atm.addOperation((AtmOperation) atmOperation);
+        atmsListeners.forEach(listener -> {
+            listener.addOperation((AtmOperation) atmOperation);
             try {
-                atm.execute();
+                listener.execute();
             } catch (AtmException e) {
                 e.printStackTrace();
             }
@@ -52,3 +46,5 @@ public class Department {
         }).sum();
     }
 }
+
+
