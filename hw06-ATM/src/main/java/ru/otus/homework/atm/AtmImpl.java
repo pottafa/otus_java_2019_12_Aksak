@@ -6,9 +6,8 @@ import ru.otus.homework.atm.operations.AtmOperation;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AtmImpl {
+public class AtmImpl implements Atm{
     private Map<Banknote, Integer> cells;
-    private AtmOperation<?> atmOperation;
     private AtmMemento initialState;
 
     AtmImpl(Map<Banknote, Integer> money) {
@@ -20,11 +19,7 @@ public class AtmImpl {
         cells = new HashMap<>(origin.cells);
     }
 
-    public void addOperation(AtmOperation<?> atmOperation) {
-        this.atmOperation = atmOperation;
-    }
-
-    public <T> T execute() throws AtmException {
+    public <T> T execute(AtmOperation<?> atmOperation) throws AtmException {
         return (T) atmOperation.execute(this);
     }
 

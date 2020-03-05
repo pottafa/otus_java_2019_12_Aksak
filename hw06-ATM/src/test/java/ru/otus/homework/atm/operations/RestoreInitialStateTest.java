@@ -48,45 +48,26 @@ class RestoreInitialStateTest {
         atmImpl4 = department.getAtmBuilder().build();
 
         AtmOperation getBalance = new GetBalance();
-        atmImpl1.addOperation(getBalance);
-        atm1Balance = atmImpl1.execute();
-
-        atmImpl2.addOperation(getBalance);
-        atm2Balance = atmImpl2.execute();
-
-        atmImpl3.addOperation(getBalance);
-        atm3Balance = atmImpl3.execute();
-
-        atmImpl4.addOperation(getBalance);
-        atm4Balance = atmImpl4.execute();
+        atm1Balance = atmImpl1.execute(getBalance);
+        atm2Balance = atmImpl2.execute(getBalance);
+        atm3Balance = atmImpl3.execute(getBalance);
+        atm4Balance = atmImpl4.execute(getBalance);
     }
 
     @DisplayName("Restoring 4 atm to initial state")
     @Test
     void execute() throws AtmException {
-        atmImpl1.addOperation(new PutMoney(Map.of(Banknote.FIVE_THOUSAND, 1, Banknote.THOUSAND, 2, Banknote.HUNDRED, 1, Banknote.FIFTY, 1)));
-        atmImpl1.execute();
-
-        atmImpl2.addOperation(new PutMoney(Map.of(Banknote.FIVE_THOUSAND, 300, Banknote.THOUSAND, 222, Banknote.HUNDRED, 12, Banknote.FIFTY, 1)));
-        atmImpl2.execute();
-
-        atmImpl3.addOperation(new PutMoney(Map.of(Banknote.FIVE_THOUSAND, 11111, Banknote.THOUSAND, 22, Banknote.HUNDRED, 2221, Banknote.FIFTY, 1111)));
-        atmImpl3.execute();
+        atmImpl1.execute(new PutMoney(Map.of(Banknote.FIVE_THOUSAND, 1, Banknote.THOUSAND, 2, Banknote.HUNDRED, 1, Banknote.FIFTY, 1)));
+        atmImpl2.execute(new PutMoney(Map.of(Banknote.FIVE_THOUSAND, 300, Banknote.THOUSAND, 222, Banknote.HUNDRED, 12, Banknote.FIFTY, 1)));
+        atmImpl3.execute(new PutMoney(Map.of(Banknote.FIVE_THOUSAND, 11111, Banknote.THOUSAND, 22, Banknote.HUNDRED, 2221, Banknote.FIFTY, 1111)));
 
         department.event(new RestoreInitialState());
 
         AtmOperation getBalance = new GetBalance();
-        atmImpl1.addOperation(getBalance);
-        int atm1BalanceAfter = atmImpl1.execute();
-
-        atmImpl2.addOperation(getBalance);
-        int atm2BalanceAfter = atmImpl2.execute();
-
-        atmImpl3.addOperation(getBalance);
-        int atm3BalanceAfter = atmImpl3.execute();
-
-        atmImpl4.addOperation(getBalance);
-        int atm4BalanceAfter = atmImpl4.execute();
+        int atm1BalanceAfter = atmImpl1.execute(getBalance);
+        int atm2BalanceAfter = atmImpl2.execute(getBalance);
+        int atm3BalanceAfter = atmImpl3.execute(getBalance);
+        int atm4BalanceAfter = atmImpl4.execute(getBalance);
         int overallBalanceBefore = atm1Balance + atm2Balance + atm3Balance + atm4Balance;
         int overallBalanceAfter = atm1BalanceAfter + atm2BalanceAfter + atm3BalanceAfter + atm4BalanceAfter;
 

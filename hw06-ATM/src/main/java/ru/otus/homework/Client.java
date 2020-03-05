@@ -20,24 +20,18 @@ public class Client {
         AtmOperation putMoney = new PutMoney(Map.of(Banknote.HUNDRED, 10, Banknote.FIVE_HUNDRED, 5, Banknote.THOUSAND, 5, Banknote.FIVE_THOUSAND, 40));
         AtmOperation getBalance = new GetBalance();
         AtmOperation withdrawMoney = new WithdrawMoney(7000);
-        atmImpl.addOperation(getBalance);
-        int balanceBef = atmImpl.execute();
+        int balanceBef = atmImpl.execute(getBalance);
         System.out.println(balanceBef);
 
-        atmImpl.addOperation(putMoney);
-        atmImpl.execute();
+        atmImpl.execute(putMoney);
 
-        atmImpl.addOperation(getBalance);
-        int balanceAfter = atmImpl.execute();
+        int balanceAfter = atmImpl.execute(getBalance);
         System.out.println(balanceAfter);
 
-        atmImpl.addOperation(withdrawMoney);
-        Map<Banknote, Integer> money = atmImpl.execute();
+        Map<Banknote, Integer> money = atmImpl.execute(withdrawMoney);
         System.out.println(money);
 
-
-        atmImpl.addOperation(getBalance);
-        int balanceAfter1 = atmImpl.execute();
+        int balanceAfter1 = atmImpl.execute(getBalance);
         System.out.println(balanceAfter1);
 
         department.event(new RestoreInitialState());

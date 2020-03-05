@@ -24,21 +24,14 @@ class GetBalanceTest {
                 .fiveTHousand(22)
                 .thousand(111)
                 .build();
-        atmImpl.addOperation(new GetBalance());
-        initialBalance = atmImpl.execute();
+        initialBalance = atmImpl.execute(new GetBalance());
     }
 
     @DisplayName("Balance is zero")
     @Test
     void zeroBalance() throws AtmException {
-
-
-        atmImpl.addOperation(new WithdrawMoney(initialBalance));
-        atmImpl.execute();
-
-        atmImpl.addOperation(new GetBalance());
-        int finalBalance = atmImpl.execute();
-
+        atmImpl.execute(new WithdrawMoney(initialBalance));
+        int finalBalance = atmImpl.execute(new GetBalance());
         assertEquals(0, finalBalance);
     }
 
@@ -46,13 +39,9 @@ class GetBalanceTest {
     @Test
     void ordinaryBalance() throws AtmException {
         AtmOperation putMoney = new PutMoney(Map.of(Banknote.FIVE_THOUSAND, 1, Banknote.THOUSAND, 2, Banknote.HUNDRED, 1, Banknote.FIFTY, 1));
-        atmImpl.addOperation(putMoney);
-        atmImpl.execute();
-
+        atmImpl.execute(putMoney);
         AtmOperation getBalance = new GetBalance();
-        atmImpl.addOperation(getBalance);
-        int balance = atmImpl.execute();
-
+        int balance = atmImpl.execute(getBalance);
         assertEquals(initialBalance + 7150, balance);
     }
 

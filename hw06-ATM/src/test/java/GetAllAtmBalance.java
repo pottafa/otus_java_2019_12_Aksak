@@ -46,17 +46,10 @@ public class GetAllAtmBalance {
         atmImpl4 = department.getAtmBuilder().build();
 
         AtmOperation getBalance = new GetBalance();
-        atmImpl1.addOperation(getBalance);
-        atm1Balance = atmImpl1.execute();
-
-        atmImpl2.addOperation(getBalance);
-        atm2Balance = atmImpl2.execute();
-
-        atmImpl3.addOperation(getBalance);
-        atm3Balance = atmImpl3.execute();
-
-        atmImpl4.addOperation(getBalance);
-        atm4Balance = atmImpl4.execute();
+        atm1Balance = atmImpl1.execute(getBalance);
+        atm2Balance = atmImpl2.execute(getBalance);
+        atm3Balance = atmImpl3.execute(getBalance);
+        atm4Balance = atmImpl4.execute(getBalance);
     }
 
     @DisplayName("Getting balance from 4 ATM")

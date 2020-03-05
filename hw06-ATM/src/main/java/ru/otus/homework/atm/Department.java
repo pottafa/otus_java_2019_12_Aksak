@@ -3,7 +3,6 @@ package ru.otus.homework.atm;
 import ru.otus.homework.atm.exceptions.AtmException;
 import ru.otus.homework.atm.operations.DepartmentOperation;
 import ru.otus.homework.atm.operations.GetBalance;
-import ru.otus.homework.atm.operations.AtmOperation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +24,8 @@ public class Department {
 
     public void event(DepartmentOperation atmOperation) {
         atmsListeners.forEach(listener -> {
-            listener.addOperation((AtmOperation) atmOperation);
             try {
-                listener.execute();
+                listener.execute(atmOperation);
             } catch (AtmException e) {
                 e.printStackTrace();
             }
@@ -36,9 +34,8 @@ public class Department {
 
     public int getAllAtmBalance() {
         return atmsListeners.stream().mapToInt(atm -> {
-            atm.addOperation(new GetBalance());
             try {
-                return atm.execute();
+                return atm.execute(new GetBalance());
             } catch (AtmException e) {
                 e.printStackTrace();
             }

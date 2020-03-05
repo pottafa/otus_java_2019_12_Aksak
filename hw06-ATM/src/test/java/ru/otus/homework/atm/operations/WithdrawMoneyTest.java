@@ -26,27 +26,23 @@ class WithdrawMoneyTest {
                 .thousand(10)
                 .hundred(10)
                 .build();
-        atmImpl.addOperation(new GetBalance());
-        initialBalance = atmImpl.execute();
+        initialBalance = atmImpl.execute(new GetBalance());
     }
 
     @DisplayName("Withdraw 1100")
     @Test
     void withdrawOneThousandAndOneHundred() throws AtmException {
         AtmOperation withdrawMoney = new WithdrawMoney(1100);
-        atmImpl.addOperation(withdrawMoney);
         Map<Banknote, Integer> expectedBanknotes = Map.of(Banknote.THOUSAND, 1, Banknote.HUNDRED, 1);
-        assertEquals(expectedBanknotes, atmImpl.execute());
+        assertEquals(expectedBanknotes, atmImpl.execute(withdrawMoney));
     }
 
     @DisplayName("Withdraw everything")
     @Test
     void withdrawEverything() throws AtmException {
         AtmOperation withdrawMoney = new WithdrawMoney(initialBalance);
-        atmImpl.addOperation(withdrawMoney);
-        atmImpl.execute();
-        atmImpl.addOperation(new GetBalance());
-        int balance = atmImpl.execute();
+        atmImpl.execute(withdrawMoney);
+        int balance = atmImpl.execute(new GetBalance());
         assertEquals(0, balance);
     }
 
@@ -54,15 +50,13 @@ class WithdrawMoneyTest {
     @Test
     void withdrawZero() {
         AtmOperation withdrawMoney = new WithdrawMoney(0);
-        atmImpl.addOperation(withdrawMoney);
-        assertThrows(AtmException.class, () -> atmImpl.execute());
+        assertThrows(AtmException.class, () -> atmImpl.execute(withdrawMoney));
     }
 
     @DisplayName("Withdraw incorrect amount of money")
     @Test
     void withdrawIncorrectAmountOfMoney() {
         AtmOperation withdrawMoney = new WithdrawMoney(10010);
-        atmImpl.addOperation(withdrawMoney);
-        assertThrows(AtmException.class, () -> atmImpl.execute());
+        assertThrows(AtmException.class, () -> atmImpl.execute(withdrawMoney));
     }
 }
