@@ -20,6 +20,7 @@
         <module>hw03-GC</module>
         <module>hw05-TestingFramework</module>
         <module>hw06-ATM</module>
+        <module>hw08-DIYGson</module>
     </modules>
 
 
