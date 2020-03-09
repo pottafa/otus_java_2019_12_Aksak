@@ -34,8 +34,9 @@ class DiyGsonTestForObjects {
     @DisplayName("Array with objects to json ")
     @Test
     void objectArrayToJson() throws IllegalAccessException {
-        Person[] array = {new Person(), new Person()};
+        Person[] array = {new Person("African"), new Person("Arabic")};
         String json = diyGson.toJson(array);
+        System.out.println(json);
         Person[] deserializedArray = realGson.fromJson(json, Person[].class);
         assertArrayEquals(array, deserializedArray);
     }
@@ -69,7 +70,7 @@ class DiyGsonTestForObjects {
     @DisplayName("Object to json ")
     @Test
     void objectToJson() throws IllegalAccessException {
-        Person person = new Person();
+        Person person = new Person("Asian");
         String json = diyGson.toJson(person);
         Person deserializedPerson = realGson.fromJson(json, Person.class);
         assertEquals(person, deserializedPerson);
@@ -87,12 +88,12 @@ class DiyGsonTestForObjects {
     @DisplayName("Object with null fields")
     @Test
     void objectWithNullFieldsToJson() throws IllegalAccessException {
-        Person person = new Person();
+        Person person = new Person("European");
         person.amountOfDogs = null;
         person.name = null;
         String json = diyGson.toJson(person);
         Person deserializedPerson = realGson.fromJson(json, Person.class);
-        assertNotEquals(deserializedPerson.amountOfDogs, null);
+        assertNull(deserializedPerson.amountOfDogs);
 
     }
 

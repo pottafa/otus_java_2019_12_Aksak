@@ -3,21 +3,27 @@ package ru.otus.homework;
 import java.util.*;
 
 public class Person {
-    public int age = 30;
+    private int age = 30;
     public String name = "John Doe";
     public ArrayList<Integer> amountOfDogs = new ArrayList<>();
     public Set<Integer> children = new HashSet<>();
+    private final String RACE;
+    private final static int AMOUNT_OF_HEADS = 1;
 
     public List<Person> friends = new ArrayList<>();
+
+    public Person(String race) {
+        RACE = race;
+    }
 
     @Override
     public String toString() {
         return "Person{" +
-                "size=" + age +
+                "age=" + age +
                 ", name='" + name + '\'' +
-                ", arrayList=" + amountOfDogs +
-                ", set=" + children +
-                ", list=" + friends +
+                ", amountOfDogs=" + amountOfDogs +
+                ", children=" + children +
+                ", friends=" + friends + "amount of heads" + AMOUNT_OF_HEADS + " race " + RACE +
                 '}';
     }
 
@@ -30,11 +36,12 @@ public class Person {
                 Objects.equals(name, person.name) &&
                 Objects.equals(amountOfDogs, person.amountOfDogs) &&
                 Objects.equals(children, person.children) &&
+                Objects.equals(RACE, person.RACE) &&
                 Objects.equals(friends, person.friends);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(age, name, amountOfDogs, children, friends);
+        return Objects.hash(age, name, amountOfDogs, children, RACE, friends);
     }
 }

@@ -1,23 +1,22 @@
 package ru.otus.homework.diyGson;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Set;
 
 import static ru.otus.homework.diyGson.DiyGsonTypes.getType;
 
 public class DiyGson {
-    final static char OBJECT_START = '{';
-    final static char OBJECT_END = '}';
-    final static char ARRAY_START = '[';
-    final static char ARRAY_END = ']';
-    final static char ELEMENT_SEPARATOR = ',';
-    private Class<?> objClass;
+    private final static char OBJECT_START = '{';
+    private final static char OBJECT_END = '}';
+    private final static char ARRAY_START = '[';
+    private final static char ARRAY_END = ']';
+    private final static char ELEMENT_SEPARATOR = ',';
 
     public String toJson(Object object) throws IllegalAccessException {
         DiyGsonBuilder builder = new DiyGsonBuilder();
         if (object == null) return builder.add(null).build();
-        objClass = object.getClass();
         parseObject(builder, object);
         return builder.build();
     }
@@ -26,10 +25,13 @@ public class DiyGson {
         switch (getType(objectToParse)) {
             case OBJECT: {
                 builder.add(OBJECT_START);
-                var declaredFields = objClass.getDeclaredFields();
+                var declaredFields = objectToParse.getClass().getDeclaredFields();
                 for (int i = 0; i < declaredFields.length; i++) {
                     var field = declaredFields[i];
+                    field.setAccessible(true);
                     if (field.get(objectToParse) == null) continue;
+                    if ((field.getModifiers() & Modifier.FINAL) == Modifier.FINAL && (field.getModifiers() & Modifier.STATIC) == Modifier.STATIC)
+                        continue;
                     builder.addWithQuotes(field.getName()).add(":");
                     parseObject(builder, field.get(objectToParse));
                     if (i != declaredFields.length - 1) builder.add(ELEMENT_SEPARATOR);

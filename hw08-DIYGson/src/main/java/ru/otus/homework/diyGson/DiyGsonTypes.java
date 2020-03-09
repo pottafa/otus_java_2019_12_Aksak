@@ -4,13 +4,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
- class DiyGsonTypes {
-    static final Set<Class<?>> WRAPPER_TYPES = getWrapperTypes();
+class DiyGsonTypes {
+    private static final Set<String> WRAPPER_TYPES = getWrapperTypes();
 
     static Type getType(Object object) {
         if (object == null) return Type.NULL;
         var objClass = object.getClass();
-        if (WRAPPER_TYPES.contains(objClass)) return Type.PRIMITIVE;
+        var className = object.getClass().getSimpleName();
+        if (WRAPPER_TYPES.contains(className)) return Type.PRIMITIVE;
         else if (objClass.isArray()) return Type.ARRAY;
         else if (objClass == String.class) return Type.STRING;
         else if (List.class.isAssignableFrom(objClass)) return Type.LIST;
@@ -28,17 +29,17 @@ import java.util.Set;
         NULL
     }
 
-    static Set<Class<?>> getWrapperTypes() {
-        Set<Class<?>> typeSet = new HashSet<>();
-        typeSet.add(Boolean.class);
-        typeSet.add(Character.class);
-        typeSet.add(Byte.class);
-        typeSet.add(Short.class);
-        typeSet.add(Integer.class);
-        typeSet.add(Long.class);
-        typeSet.add(Float.class);
-        typeSet.add(Double.class);
-        typeSet.add(Void.class);
+    static Set<String> getWrapperTypes() {
+        Set<String> typeSet = new HashSet<>();
+        typeSet.add("Boolean");
+        typeSet.add("Character");
+        typeSet.add("Byte");
+        typeSet.add("Short");
+        typeSet.add("Integer");
+        typeSet.add("Long");
+        typeSet.add("Float");
+        typeSet.add("Double");
+        typeSet.add("Void");
         return typeSet;
     }
 }

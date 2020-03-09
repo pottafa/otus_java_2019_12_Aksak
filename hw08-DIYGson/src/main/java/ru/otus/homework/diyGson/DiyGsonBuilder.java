@@ -1,7 +1,7 @@
 package ru.otus.homework.diyGson;
 
  class DiyGsonBuilder {
-    String json = "";
+   private String json = "";
 
      DiyGsonBuilder add(String value) {
         json += value;
