@@ -79,4 +79,13 @@ class DiyGsonTestforPrimitives {
         boolean deserializedNumber = realGson.fromJson(json, boolean.class);
         assertEquals(bool, deserializedNumber);
     }
+
+    @DisplayName("char type")
+    @Test
+    void charToJson() throws IllegalAccessException {
+        char number = '/';
+        String json = diyGson.toJson(number);
+        char deserializedNumber = realGson.fromJson(json, char.class);
+        assertEquals(number, deserializedNumber);
+    }
 }
