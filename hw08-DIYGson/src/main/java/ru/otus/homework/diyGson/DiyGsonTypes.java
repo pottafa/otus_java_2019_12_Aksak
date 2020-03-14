@@ -1,5 +1,6 @@
 package ru.otus.homework.diyGson;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -13,8 +14,7 @@ class DiyGsonTypes {
         if (WRAPPER_TYPES.contains(objClass)) return Type.PRIMITIVE;
         else if (objClass.isArray()) return Type.ARRAY;
         else if (objClass == String.class || objClass == Character.class) return Type.STRING;
-        else if (List.class.isAssignableFrom(objClass)) return Type.LIST;
-        else if (Set.class.isAssignableFrom(objClass)) return Type.SET;
+        else if (Collection.class.isAssignableFrom(objClass)) return Type.COLLECTION;
         else return Type.OBJECT;
     }
 
@@ -22,9 +22,8 @@ class DiyGsonTypes {
         PRIMITIVE,
         STRING,
         ARRAY,
-        LIST,
-        SET,
         OBJECT,
+        COLLECTION,
         NULL
     }
 

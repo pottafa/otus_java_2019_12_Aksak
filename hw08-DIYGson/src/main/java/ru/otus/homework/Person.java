@@ -7,13 +7,13 @@ public class Person {
     public String name = "John Doe";
     public ArrayList<Integer> amountOfDogs = new ArrayList<>();
     public Set<Integer> children = new HashSet<>();
-    private final String RACE;
+    private final String race;
     private final static int AMOUNT_OF_HEADS = 1;
 
     public List<Person> friends = new ArrayList<>();
 
     public Person(String race) {
-        RACE = race;
+        this.race = race;
     }
 
     @Override
@@ -23,7 +23,7 @@ public class Person {
                 ", name='" + name + '\'' +
                 ", amountOfDogs=" + amountOfDogs +
                 ", children=" + children +
-                ", friends=" + friends + "amount of heads" + AMOUNT_OF_HEADS + " race " + RACE +
+                ", friends=" + friends + "amount of heads" + AMOUNT_OF_HEADS + " race " + race +
                 '}';
     }
 
@@ -36,12 +36,12 @@ public class Person {
                 Objects.equals(name, person.name) &&
                 Objects.equals(amountOfDogs, person.amountOfDogs) &&
                 Objects.equals(children, person.children) &&
-                Objects.equals(RACE, person.RACE) &&
+                Objects.equals(race, person.race) &&
                 Objects.equals(friends, person.friends);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(age, name, amountOfDogs, children, RACE, friends);
+        return Objects.hash(age, name, amountOfDogs, children, race, friends);
     }
 }

@@ -2,6 +2,7 @@ package ru.otus.homework.diyGson;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -47,27 +48,8 @@ public class DiyGson {
                 builder.add(objectToParse.toString());
                 break;
             }
-            case LIST: {
-                var list = (List) objectToParse;
-                builder.add(ARRAY_START);
-                for (int i = 0; i < list.size(); i++) {
-                    var object = list.get(i);
-                    parseObject(builder, object);
-                    if (i != list.size() - 1) builder.add(ELEMENT_SEPARATOR);
-                }
-                builder.add(ARRAY_END);
-                break;
-            }
-            case SET: {
-                var set = (Set) objectToParse;
-                var setIterator = set.iterator();
-                builder.add(ARRAY_START);
-                while (setIterator.hasNext()) {
-                    var object = setIterator.next();
-                    parseObject(builder, object);
-                    if (setIterator.hasNext()) builder.add(ELEMENT_SEPARATOR);
-                }
-                builder.add(ARRAY_END);
+            case COLLECTION: {
+                parseObject(builder, ((Collection) objectToParse).toArray());
                 break;
             }
             case ARRAY: {
