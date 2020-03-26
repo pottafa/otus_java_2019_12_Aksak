@@ -44,10 +44,18 @@ public class DbServiceDemo {
         SqlMapper mapper = new SqlMapperImpl();
         UserDao userDao = new UserDaoJdbc(sessionManager, dbExecutor, mapper);
         DBServiceUser dbService = new DbServiceUserImpl(userDao);
-        long id = dbService.saveUser(new User(0, "dbServiceUser", 34));
+        long id = dbService.saveUser(new User(2, "dbServiceUser", 34));
         Optional<User> user = dbService.getUser(id);
         user.ifPresentOrElse(
                 crUser -> logger.info("created user, name:{}", crUser.getName()),
+                () -> logger.info("user was not created")
+        );
+
+dbService.updateUser(new User(id, "updatedUser", 34));
+
+        Optional<User> updatedUser = dbService.getUser(id);
+        updatedUser.ifPresentOrElse(
+                crUser -> logger.info("updated user, name:{}", crUser.getName()),
                 () -> logger.info("user was not created")
         );
 

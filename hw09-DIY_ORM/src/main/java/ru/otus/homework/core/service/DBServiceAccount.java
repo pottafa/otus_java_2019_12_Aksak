@@ -10,4 +10,6 @@ public interface DBServiceAccount {
 
     Optional<Account> getAccount(long id);
 
+    void updateAccount(Account account);
+
 }

@@ -7,23 +7,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SqlMapperImpl implements SqlMapper {
-    private SqlBuilder builder = new SqlBuilder();
-    private JdbcParser parser = new JdbcParser();
-    private List<String> params;
+    private SqlBuilder builder;
+    private JdbcParser parser;
 
-    public List<String> getParams() {
+    public List<String> getParamsWithoutId() {
+        return parser.getParams();
+    }
+
+    public List<String> getParamsWithId() {
+        List<String> params = new ArrayList<>(getParamsWithoutId());
+        params.add(parser.getIdValue());
         return params;
     }
 
     public String createSqlInsert(Object objectToParse) {
-        params = new ArrayList<>();
-        parser.parseObject(builder, objectToParse, params);
+        builder = new SqlBuilder();
+        parser = new JdbcParser();
+        parser.parseObject(builder, objectToParse);
         return builder.buildInsertSql();
     }
 
     public String createSqlSelect(Class classData) {
+        builder = new SqlBuilder();
+        parser = new JdbcParser();
         parser.parseClass(builder, classData);
         return builder.buildSelectSql();
+    }
+
+    public String createSqlUpdate(Object objectToParse) {
+        builder = new SqlBuilder();
+        parser = new JdbcParser();
+        parser.parseObject(builder, objectToParse);
+        return builder.buildUpdateSql();
     }
 
 }

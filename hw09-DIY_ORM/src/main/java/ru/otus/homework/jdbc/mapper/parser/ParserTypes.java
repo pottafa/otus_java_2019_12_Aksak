@@ -1,6 +1,5 @@
 package ru.otus.homework.jdbc.mapper.parser;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,22 +7,14 @@ class ParserTypes {
     private static final Set<Class<?>> WRAPPER_TYPES = getWrapperTypes();
 
     static Type getType(Object object) {
-        if (object == null) return Type.NULL;
         var objClass = object.getClass();
-        if (WRAPPER_TYPES.contains(objClass)) return Type.PRIMITIVE;
-        else if (objClass.isArray()) return Type.ARRAY;
-        else if (objClass == String.class || objClass == Character.class) return Type.STRING;
-        else if (Collection.class.isAssignableFrom(objClass)) return Type.COLLECTION;
+        if (WRAPPER_TYPES.contains(objClass) || objClass == String.class) return Type.FIELD;
         else return Type.OBJECT;
     }
 
     enum Type {
-        PRIMITIVE,
-        STRING,
-        ARRAY,
-        OBJECT,
-        COLLECTION,
-        NULL
+        FIELD,
+        OBJECT
     }
 
     static Set<Class<?>> getWrapperTypes() {
@@ -36,6 +27,7 @@ class ParserTypes {
         typeSet.add(Float.class);
         typeSet.add(Double.class);
         typeSet.add(Void.class);
+        typeSet.add(Character.class);
         return typeSet;
     }
 }

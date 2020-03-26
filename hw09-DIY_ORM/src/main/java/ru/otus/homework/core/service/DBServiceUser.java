@@ -1,5 +1,6 @@
 package ru.otus.homework.core.service;
 
+
 import ru.otus.homework.core.model.User;
 
 import java.util.Optional;
@@ -10,4 +11,5 @@ public interface DBServiceUser {
 
     Optional<User> getUser(long id);
 
+    void updateUser(User user);
 }

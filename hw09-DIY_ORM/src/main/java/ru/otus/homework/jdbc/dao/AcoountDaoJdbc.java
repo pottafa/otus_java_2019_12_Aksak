@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.homework.core.dao.AccountDao;
 import ru.otus.homework.core.dao.AccountDaoException;
+import ru.otus.homework.core.dao.UserDaoException;
 import ru.otus.homework.core.model.Account;
 import ru.otus.homework.core.sessionmanager.SessionManager;
 import ru.otus.homework.jdbc.DbExecutor;
@@ -20,14 +21,13 @@ public class AcoountDaoJdbc implements AccountDao {
 
     private final SessionManagerJdbc sessionManager;
     private final DbExecutor<Account> dbExecutor;
-    private final SqlMapper<Account> mapper;
+    private final SqlMapper mapper;
 
-    public AcoountDaoJdbc(SessionManagerJdbc sessionManager, DbExecutor<Account> dbExecutor, SqlMapper<Account> mapper) {
+    public AcoountDaoJdbc(SessionManagerJdbc sessionManager, DbExecutor<Account> dbExecutor, SqlMapper mapper) {
         this.sessionManager = sessionManager;
         this.dbExecutor = dbExecutor;
         this.mapper = mapper;
     }
-
 
     @Override
     public Optional<Account> findById(long id) {
@@ -53,11 +53,22 @@ public class AcoountDaoJdbc implements AccountDao {
     @Override
     public long saveAccount(Account account) {
         try {
-            return dbExecutor.insertRecord(getConnection(), mapper.createSqlInsert(account), mapper.getParams());
+            return dbExecutor.insertRecord(getConnection(), mapper.createSqlInsert(account), mapper.getParamsWithoutId());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new AccountDaoException(e);
         }
+    }
+
+    @Override
+    public void updateAccount(Account account) {
+        try {
+            dbExecutor.updateRecord(getConnection(), mapper.createSqlUpdate(account), mapper.getParamsWithId());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new UserDaoException(e);
+        }
+
     }
 
     @Override

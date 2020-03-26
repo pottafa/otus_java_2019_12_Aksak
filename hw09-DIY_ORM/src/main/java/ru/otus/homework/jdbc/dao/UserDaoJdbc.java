@@ -21,9 +21,9 @@ public class UserDaoJdbc implements UserDao {
 
     private final SessionManagerJdbc sessionManager;
     private final DbExecutor<User> dbExecutor;
-    private final SqlMapper<User> mapper;
+    private final SqlMapper mapper;
 
-    public UserDaoJdbc(SessionManagerJdbc sessionManager, DbExecutor<User> dbExecutor, SqlMapper<User> mapper) {
+    public UserDaoJdbc(SessionManagerJdbc sessionManager, DbExecutor<User> dbExecutor, SqlMapper mapper) {
         this.sessionManager = sessionManager;
         this.dbExecutor = dbExecutor;
         this.mapper = mapper;
@@ -53,12 +53,24 @@ public class UserDaoJdbc implements UserDao {
     @Override
     public long saveUser(User user) {
         try {
-            return dbExecutor.insertRecord(getConnection(), mapper.createSqlInsert(user), mapper.getParams());
+            return dbExecutor.insertRecord(getConnection(), mapper.createSqlInsert(user), mapper.getParamsWithoutId());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new UserDaoException(e);
         }
     }
+
+    @Override
+    public void updateUser(User user) {
+        try {
+            dbExecutor.updateRecord(getConnection(), mapper.createSqlUpdate(user), mapper.getParamsWithId());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new UserDaoException(e);
+        }
+
+    }
+
 
     @Override
     public SessionManager getSessionManager() {

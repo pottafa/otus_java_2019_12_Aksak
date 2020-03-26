@@ -24,7 +24,7 @@ class SqlMapperImplTest {
     void getParamsWithoutId() {
         mapper = new SqlMapperImpl();
         mapper.createSqlInsert(user);
-        List<String> listParams = mapper.getParams();
+        List<String> listParams = mapper.getParamsWithoutId();
         List<String> expected = Arrays.asList("Alex", "35");
 
         System.out.println(Arrays.toString(listParams.toArray()));
@@ -44,5 +44,12 @@ class SqlMapperImplTest {
     void getSqlSelect() {
         mapper = new SqlMapperImpl();
         assertEquals("select id,name,age from user where id  = ?", mapper.createSqlSelect(User.class));
+    }
+
+    @Test
+    @DisplayName("Get update sql request")
+    void getSqlUpdate() {
+        mapper = new SqlMapperImpl();
+        assertEquals("update user set name=?,age=? where id=?", mapper.createSqlUpdate(user));
     }
 }
