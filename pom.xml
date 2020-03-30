@@ -22,6 +22,7 @@
         <module>hw06-ATM</module>
         <module>hw08-DIYGson</module>
         <module>hw09-DIY_ORM</module>
+        <module>hw10-hibernate</module>
     </modules>
 
 
