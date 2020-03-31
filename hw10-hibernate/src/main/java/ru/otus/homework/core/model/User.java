@@ -13,27 +13,24 @@ import java.util.List;
 @Table(name = "user_table")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
     private long id;
     @Column(name = "name")
     private String name;
     @Column(name = "age")
     private int age;
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private AddressDataSet address;
 
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PhoneDataSet> phoneList;
 
     public User() {
-
     }
 
-    public User(long id, String name, int age, AddressDataSet address, List<PhoneDataSet> phones) {
-        this.id = id;
+    public User(String name, int age, AddressDataSet address, List<PhoneDataSet> phones) {
         this.name = name;
         this.age = age;
         this.address = address;

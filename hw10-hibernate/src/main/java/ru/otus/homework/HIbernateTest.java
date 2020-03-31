@@ -29,10 +29,14 @@ public class HIbernateTest {
         UserDao dao = new UserDaoHibernate(managerHibernate);
         DBServiceUser dbServiceUser = new DbServiceUserImpl(dao);
 
-        List<PhoneDataSet> phoneDataSets = new ArrayList<>();
-        phoneDataSets.add(new PhoneDataSet());
-        phoneDataSets.add(new PhoneDataSet());
-        long id = dbServiceUser.saveUser(new User(0, "Вася", 35, new AddressDataSet(), phoneDataSets));
+        List<PhoneDataSet> alexPhones = new ArrayList<>();
+        alexPhones.add(new PhoneDataSet("12345678"));
+        alexPhones.add(new PhoneDataSet("87654321"));
+
+        AddressDataSet alexAddress = new AddressDataSet("Moscow, Some Street, Some building");
+
+        User alex = new User("Алекс", 30, alexAddress, alexPhones );
+        long id = dbServiceUser.saveUser(alex);
         Optional<User> mayBeCreatedUser = dbServiceUser.getUser(id);
 
     }
