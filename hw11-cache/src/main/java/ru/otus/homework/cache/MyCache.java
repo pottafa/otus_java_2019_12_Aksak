@@ -3,8 +3,8 @@ package ru.otus.homework.cache;
 import java.util.*;
 
 public class MyCache<K, V> implements HwCache<K, V> {
-    Map<K, V> references = new WeakHashMap<>();
-    List<HwListener<K, V>> listeners = new ArrayList<>();
+  private final Map<K, V> references = new WeakHashMap<>();
+  private final List<HwListener<K, V>> listeners = new ArrayList<>();
 
     @Override
     public void put(K key, V value) {
@@ -20,7 +20,6 @@ public class MyCache<K, V> implements HwCache<K, V> {
 
     @Override
     public V get(K key) {
-        listeners.forEach(listener -> listener.notify(key, references.get(key), "get"));
         return references.get(key);
     }
 
