@@ -12,9 +12,7 @@ import java.util.*;
 
 
 public class UsersServlet extends HttpServlet {
-    private static final String PARAM_LOGIN = "login";
-    private static final String PARAM_PASSWORD = "password";
-    private static final String USERS_PAGE_TEMPLATE = "admin-panel.html";
+       private static final String ADMIN_PAGE_TEMPLATE = "admin-panel.html";
 
     private final DBServiceUser dbServiceUser;
     private final TemplateProcessor templateProcessor;
@@ -30,14 +28,9 @@ public class UsersServlet extends HttpServlet {
         List<User> users = dbServiceUser.getAllUsers();
         paramsMap.put("usersList", users);
         response.setContentType("text/html");
-        response.getWriter().println(templateProcessor.getPage(USERS_PAGE_TEMPLATE, paramsMap));
+        response.getWriter().println(templateProcessor.getPage(ADMIN_PAGE_TEMPLATE, paramsMap));
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        String login = request.getParameter(PARAM_LOGIN);
-        String password = request.getParameter(PARAM_PASSWORD);
-        dbServiceUser.saveUser(new User(login, password));
-    }
+
 
 }

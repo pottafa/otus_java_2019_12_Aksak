@@ -17,7 +17,7 @@ import ru.otus.homework.services.TemplateProcessorImpl;
 import ru.otus.homework.services.UserAuthService;
 import ru.otus.homework.services.UserAuthServiceImpl;
 
-public class Test {
+public class UserWebServerApp {
     private static final int WEB_SERVER_PORT = 8080;
     private static final String TEMPLATES_DIR = "/templates/";
 

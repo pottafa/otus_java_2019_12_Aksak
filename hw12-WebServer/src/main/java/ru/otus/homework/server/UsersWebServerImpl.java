@@ -13,6 +13,7 @@ import ru.otus.homework.services.TemplateProcessor;
 import ru.otus.homework.services.UserAuthService;
 import ru.otus.homework.servlet.AuthorizationFilter;
 import ru.otus.homework.servlet.LoginServlet;
+import ru.otus.homework.servlet.UsersCreateServlet;
 import ru.otus.homework.servlet.UsersServlet;
 
 import java.util.Arrays;
@@ -58,7 +59,7 @@ public class UsersWebServerImpl implements UsersWebServer {
 
         HandlerList handlers = new HandlerList();
         handlers.addHandler(resourceHandler);
-        handlers.addHandler(applySecurity(servletContextHandler, "/users"));
+        handlers.addHandler(applySecurity(servletContextHandler, "/users", "/admin-panel", "/user-create"));
 
 
         server.setHandler(handlers);
@@ -66,7 +67,7 @@ public class UsersWebServerImpl implements UsersWebServer {
     }
 
     protected Handler applySecurity(ServletContextHandler servletContextHandler, String... paths) {
-        servletContextHandler.addServlet(new ServletHolder(new LoginServlet(templateProcessor, authService)), "/login");
+        servletContextHandler.addServlet(new ServletHolder(new LoginServlet(templateProcessor, authService)), "/");
         AuthorizationFilter authorizationFilter = new AuthorizationFilter();
         Arrays.stream(paths).forEachOrdered(path -> servletContextHandler.addFilter(new FilterHolder(authorizationFilter), path, null));
         return servletContextHandler;
@@ -83,6 +84,7 @@ public class UsersWebServerImpl implements UsersWebServer {
     private ServletContextHandler createServletContextHandler() {
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         servletContextHandler.addServlet(new ServletHolder(new UsersServlet(templateProcessor, dbServiceUser)), "/admin-panel");
+        servletContextHandler.addServlet(new ServletHolder(new UsersCreateServlet(templateProcessor, dbServiceUser)), "/user-create");
         return servletContextHandler;
     }
 }
