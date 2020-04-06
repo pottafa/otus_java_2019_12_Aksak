@@ -12,6 +12,11 @@ public class AppConfigFirstPart {
         return new EquationPreparerImpl();
     }
 
+    @AppComponent(order = 1, name = "playerServiceLoggable")
+    public LoggablePlayerService aaaaaaaaa(PlayerService playerService) {
+        return new LoggablePlayerService(playerService);
+    }
+
     @AppComponent(order = 1, name = "playerService")
     public PlayerService playerService(IOService ioService) {
         return new PlayerServiceImpl(ioService);
