@@ -1,5 +1,7 @@
 package ru.otus.homework.appcontainer;
 
+import org.reflections.Reflections;
+import org.reflections.scanners.TypeAnnotationsScanner;
 import ru.otus.homework.appcontainer.api.AppComponent;
 import ru.otus.homework.appcontainer.api.AppComponentsContainer;
 import ru.otus.homework.appcontainer.api.AppComponentsContainerConfig;
@@ -22,37 +24,48 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
         }
     }
 
-    private void processConfig(Class<?>... configClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public AppComponentsContainerImpl(String packagePath) throws AppContainerException {
+        Reflections reflections = new Reflections(packagePath,
+                new TypeAnnotationsScanner());
+        Set<Class<?>> packageClasses = reflections.getTypesAnnotatedWith(AppComponentsContainerConfig.class, true);
+        Class<?>[] configClasses =  new Class<?>[packageClasses.size()];
+        configClasses = packageClasses.toArray(configClasses);
+        try {
+            processConfig(configClasses);
+        } catch (Exception ex) {
+            throw new AppContainerException(ex);
+        }
+
+    }
+
+    private void processConfig(Class<?>... configClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, AppContainerException {
         var annotatedMethods = new HashMap<Method, Object>();
         for (Class<?> aClass : configClass) {
             checkConfigClass(aClass);
             parseMethods(annotatedMethods, aClass);
         }
         List<Method> sortedMethods = sortMethods(annotatedMethods);
-        process(annotatedMethods, sortedMethods.iterator());
-        if (sortedMethods.size() != 0) process(annotatedMethods, sortedMethods.iterator());
+        process(annotatedMethods, sortedMethods);
     }
 
-    private void process(HashMap<Method, Object> annotatedMethods, Iterator<Method> listIterator) throws IllegalAccessException, InvocationTargetException {
-        while (listIterator.hasNext()) {
-            var method = listIterator.next();
-            List<Object> params = getMethodParams(method);
-            if (params == null || !method.isAnnotationPresent(AppComponent.class)) continue;
-            var annotationNameValue = method.getAnnotation(AppComponent.class).name();
-            Object methodResult = method.invoke(annotatedMethods.get(method), params.toArray());
-            appComponents.add(methodResult);
-            appComponentsByName.put(annotationNameValue, methodResult);
-            listIterator.remove();
-        }
+    private List<Method> sortMethods(HashMap<Method, Object> annotatedMethods) {
+        return   annotatedMethods.keySet().stream()
+                  .sorted(Comparator.comparingInt(method -> method.getAnnotation(AppComponent.class).order()))
+                  .collect(Collectors.toList());
     }
 
-    private List<Method> sortMethods(Map<Method, Object> annotatedMethods) {
-        return annotatedMethods.keySet().stream()
-                .sorted(Comparator.comparingInt(Method::getParameterCount))
-                .collect(Collectors.toList());
+    private void process(HashMap<Method, Object> annotatedMethods, List<Method> methods) throws IllegalAccessException, InvocationTargetException, AppContainerException {
+       for(Method methodToProcess: methods) {
+           if (!methodToProcess.isAnnotationPresent(AppComponent.class)) continue;
+           List<Object> params = getMethodParams(methodToProcess);
+           var annotationNameValue = methodToProcess.getAnnotation(AppComponent.class).name();
+           Object methodResult = methodToProcess.invoke(annotatedMethods.get(methodToProcess), params.toArray());
+           appComponents.add(methodResult);
+           appComponentsByName.put(annotationNameValue, methodResult);
+       }
     }
 
-    private List<Object> getMethodParams(Method method) {
+    private List<Object> getMethodParams(Method method) throws AppContainerException {
         List<Object> params = new ArrayList<>();
         for (Class<?> clazz : method.getParameterTypes())
             for (Object obj : appComponents)
@@ -60,8 +73,8 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
                     params.add(obj);
                     break;
                 }
-        if (params.size() != method.getParameterCount()) return null;
-        return params;
+        if (params.size() == method.getParameterCount()) return params;
+        throw new AppContainerException(String.format("Wrong order value in method %s", method.getName()));
     }
 
     private void parseMethods(Map<Method, Object> annotatedMethods, Class<?> configClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {

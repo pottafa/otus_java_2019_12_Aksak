@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class AppConfigSecondPart {
 
 
-    @AppComponent(order = 2, name = "gameProcessor")
+    @AppComponent(order = 3, name = "gameProcessor")
     public GameProcessor gameProcessor(IOService ioService,
                                        PlayerService playerService,
                                        EquationPreparer equationPreparer) {

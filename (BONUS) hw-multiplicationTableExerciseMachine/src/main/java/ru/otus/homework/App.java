@@ -3,9 +3,7 @@ package ru.otus.homework;
 import ru.otus.homework.appcontainer.AppComponentsContainerImpl;
 import ru.otus.homework.appcontainer.AppContainerException;
 import ru.otus.homework.appcontainer.api.AppComponentsContainer;
-import ru.otus.homework.config.AppConfigFirstPart;
-import ru.otus.homework.config.AppConfigSecondPart;
-import ru.otus.homework.services.LoggablePlayerService;
+import ru.otus.homework.services.GameProcessor;
 
 /*
 В классе AppComponentsContainerImpl реализовать обработку, полученной в конструкторе конфигурации,
@@ -23,14 +21,9 @@ public class App {
         //    GameProcessor gameProcessor = container.getAppComponent(GameProcessor.class);
         //    gameProcessor.startGame();
 
-        //    With one config class
-        //    AppComponentsContainer container = new AppComponentsContainerImpl(AppConfigFull.class);
-        //    GameProcessor gameProcessor = container.getAppComponent(GameProcessor.class);
-        //    gameProcessor.startGame();
-
-        //    Getting proxy app component that stands before the original class
-        AppComponentsContainer container = new AppComponentsContainerImpl(AppConfigFirstPart.class, AppConfigSecondPart.class);
-        LoggablePlayerService loggablePlayerService = container.getAppComponent(LoggablePlayerService.class);
-        loggablePlayerService.getPlayer();
+        // Package as parameter
+        AppComponentsContainer container = new AppComponentsContainerImpl("ru.otus.homework.config");
+            GameProcessor gameProcessor = container.getAppComponent(GameProcessor.class);
+            gameProcessor.startGame();
     }
 }
