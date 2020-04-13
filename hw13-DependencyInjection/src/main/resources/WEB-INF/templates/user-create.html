@@ -1,0 +1,61 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.create {
+  margin: auto;
+  position: relative;
+  text-align: center;
+  top: 10%;
+  width: 30%;
+}
+input {
+  width: 80%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+img {
+  width: 40%;
+  border-radius: 15%;
+  }
+</style>
+<head>
+    <title>Create user</title>
+
+</head>
+
+
+<body>
+<div class="create">
+<h4>Create user</h4>
+  <img th:src="@{/images/newuser.png}">
+<form th:action="@{/admin-panel/save}" th:object="${user}" th:method="post" accept-charset="utf-8" >
+    <label>
+        login <br/>
+        <input type="text" name="login" th:value="${user.login}" placeholder="login" required>
+    </label>
+    <br/>
+    <label>
+        password<br/>
+        <input type="password"  name="password" th:value="${user.password}" placeholder="password" required>
+    </label>
+    <br/>
+  <label>
+    name <br/>
+    <input type="text" name="name" th:value="${user.name}" placeholder="name">
+  </label>
+  <br/>
+  <label>
+    age<br/>
+    <input type="number"  name="age" th:value="${user.age}" placeholder="age" min="18" max="120" value="18">
+  </label><br/>
+  <div>
+    <button type="submit">Save</button>
+  </div>
+</form>
+</div>
+
+</body>
+</html>
