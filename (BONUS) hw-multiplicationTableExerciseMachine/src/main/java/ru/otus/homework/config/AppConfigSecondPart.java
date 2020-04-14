@@ -6,11 +6,16 @@ import ru.otus.homework.services.*;
 
 import java.util.Scanner;
 
-@AppComponentsContainerConfig(order = 1)
+@AppComponentsContainerConfig(order = 2)
 public class AppConfigSecondPart {
 
 
-    @AppComponent(order = 3, name = "gameProcessor")
+  @AppComponent(order = 1, name = "playerServiceLoggable")
+  public LoggablePlayerService aaaaaaaaa(PlayerService playerService) {
+    return new LoggablePlayerService(playerService);
+  }
+
+    @AppComponent(order = 2, name = "gameProcessor")
     public GameProcessor gameProcessor(IOService ioService,
                                        PlayerService playerService,
                                        EquationPreparer equationPreparer) {

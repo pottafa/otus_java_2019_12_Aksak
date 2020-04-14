@@ -15,15 +15,15 @@ PS Приложение представляет из себя тренажер 
 
 public class App {
 
-    public static void main(String[] args) throws AppContainerException {
-        //    With several config classes
-        //    AppComponentsContainer container = new AppComponentsContainerImpl(AppConfigFirstPart.class, AppConfigSecondPart.class);
-        //    GameProcessor gameProcessor = container.getAppComponent(GameProcessor.class);
-        //    gameProcessor.startGame();
+  public static void main(String[] args) throws AppContainerException {
+    //    With several config classes
+    //    AppComponentsContainer container = new AppComponentsContainerImpl(AppConfigFirstPart.class, AppConfigSecondPart.class);
+    //    GameProcessor gameProcessor = container.getAppComponent(GameProcessor.class);
+    //    gameProcessor.startGame();
 
-        // Package as parameter
-        AppComponentsContainer container = new AppComponentsContainerImpl("ru.otus.homework.config");
-            GameProcessor gameProcessor = container.getAppComponent(GameProcessor.class);
-            gameProcessor.startGame();
-    }
+    // Package as parameter
+    AppComponentsContainer container = new AppComponentsContainerImpl("ru.otus.homework.config");
+    GameProcessor gameProcessor = container.getAppComponent(GameProcessor.class);
+    gameProcessor.startGame();
+  }
 }
