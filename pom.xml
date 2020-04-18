@@ -27,6 +27,7 @@
     <module>hw11-cache</module>
     <module>hw12-WebServer</module>
     <module>hw13-DependencyInjection</module>
+    <module>hw14-SequenceOfNumbers</module>
   </modules>
 
   <properties>
