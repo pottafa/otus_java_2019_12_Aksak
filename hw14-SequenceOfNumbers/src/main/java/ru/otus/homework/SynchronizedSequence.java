@@ -1,7 +1,11 @@
 package ru.otus.homework;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class SynchronizedSequence {
-  private final Object lock = new Object();
+  private static Logger logger = LoggerFactory.getLogger(SynchronizedSequence.class);
+  private volatile Thread currentThread;
 
   public static void main(String[] args) {
     SynchronizedSequence sequence = new SynchronizedSequence();
@@ -9,24 +13,27 @@ public class SynchronizedSequence {
   }
 
   public void sequence() {
-    for (int i = 1; i <= 10; i++) syncCount(i);
-    for (int i = 9; i > 0; i--) syncCount(i);
-    synchronized (lock) {
-      lock.notifyAll();
+    for (int i = 1; i <= 10; i++) {
+      syncCount(i);
     }
+    for (int i = 9; i > 0; i--) {
+      syncCount(i);
+    }
+    currentThread.interrupt();
   }
 
-
-  private void syncCount(int count) {
+  private synchronized void syncCount(int count) {
     try {
-        synchronized (lock) {
-          System.out.println(Thread.currentThread().getName() + " " + count);
-          lock.notify();
-          lock.wait();
-          Thread.sleep(500);
-        }
+      currentThread = Thread.currentThread();
+      notify();
+      logger.info(String.valueOf(count));
+      while (currentThread.equals(Thread.currentThread())) {
+        wait();
+      }
+      Thread.sleep(100);
     } catch (InterruptedException ex) {
-      ex.printStackTrace();
+      logger.info(currentThread.getName() + " has been interrupted");
+      currentThread.interrupt();
     }
   }
 
