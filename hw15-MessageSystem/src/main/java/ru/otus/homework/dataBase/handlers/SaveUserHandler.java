@@ -20,6 +20,6 @@ public class SaveUserHandler implements RequestHandler {
   public Optional<Message> handle(Message msg) {
     User user = Serializers.deserialize(msg.getPayload(), User.class);
     dbService.saveUser(user);
-    return Optional.empty();
+    return Optional.of(new Message(msg.getTo(), msg.getFrom(), msg.getId(), MessageType.USER_DATA.getValue(), Serializers.serialize(null)));
   }
 }

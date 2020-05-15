@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import ru.otus.homework.dataBase.core.model.User;
 import ru.otus.homework.messagesystem.Message;
@@ -25,12 +27,8 @@ public class FrontendServiceImpl implements FrontendService {
   private MsClient frontendMsClient;
   private final String databaseServiceClientName;
 
-  public FrontendServiceImpl(@Qualifier("dbClientName") String databaseServiceClientName) {
+  public FrontendServiceImpl(@Value("${database_service_client_name}") String databaseServiceClientName, @Lazy MsClient frontendMsClient) {
     this.databaseServiceClientName = databaseServiceClientName;
-  }
-
-  @Autowired
-  public void setFrontendMsClient(MsClient frontendMsClient) {
     this.frontendMsClient = frontendMsClient;
   }
 
@@ -42,8 +40,9 @@ public class FrontendServiceImpl implements FrontendService {
   }
 
   @Override
-  public void saveUserData(User user) {
+  public void saveUserData(User user, Consumer<User> dataConsumer) {
     Message outMsg = frontendMsClient.produceMessage(databaseServiceClientName, user, MessageType.USER_DATA);
+    consumerMap.put(outMsg.getId(), dataConsumer);
     frontendMsClient.sendMessage(outMsg);
   }
 
