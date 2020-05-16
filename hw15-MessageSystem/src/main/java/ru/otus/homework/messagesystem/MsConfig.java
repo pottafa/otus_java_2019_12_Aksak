@@ -1,4 +1,4 @@
-package ru.otus.homework;
+package ru.otus.homework.messagesystem;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -13,13 +13,12 @@ import ru.otus.homework.front.handlers.SaveUserDataResponseHandler;
 import ru.otus.homework.messagesystem.*;
 
 @Configuration
-@ComponentScan
 public class MsConfig {
 
     @Value("${frontend_service_client_name}")
-    private String FRONTEND_SERVICE_CLIENT_NAME;
+    private String frontendServiceClientName;
     @Value("${database_service_client_name}")
-    private String DATABASE_SERVICE_CLIENT_NAME;
+    private String databaseServiceClientName;
 
     @Bean(destroyMethod = "dispose")
     public MessageSystem messageSystem() {
@@ -28,7 +27,7 @@ public class MsConfig {
 
     @Bean
     public MsClient frontendMsClient(MessageSystem messageSystem, FrontendService frontendService) {
-        MsClient frontendClient = new MsClientImpl(FRONTEND_SERVICE_CLIENT_NAME, messageSystem);
+        MsClient frontendClient = new MsClientImpl(frontendServiceClientName, messageSystem);
         frontendClient.addHandler(MessageType.ALL_USERS_DATA, new GetAllUsersDataResponseHandler(frontendService));
         frontendClient.addHandler(MessageType.USER_DATA, new SaveUserDataResponseHandler(frontendService));
         messageSystem.addClient(frontendClient);
@@ -37,7 +36,7 @@ public class MsConfig {
 
     @Bean
     public MsClient dbClient(MessageSystem messageSystem, DBServiceUser dbServiceUser) {
-        MsClient databaseMsClient = new MsClientImpl(DATABASE_SERVICE_CLIENT_NAME, messageSystem);
+        MsClient databaseMsClient = new MsClientImpl(databaseServiceClientName, messageSystem);
         databaseMsClient.addHandler(MessageType.USER_DATA, new SaveUserHandler(dbServiceUser));
         databaseMsClient.addHandler(MessageType.ALL_USERS_DATA, new GetAllUsersData(dbServiceUser));
         messageSystem.addClient(databaseMsClient);

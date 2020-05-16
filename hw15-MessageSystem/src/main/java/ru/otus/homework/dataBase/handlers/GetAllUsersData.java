@@ -1,6 +1,6 @@
 package ru.otus.homework.dataBase.handlers;
 
-import ru.otus.homework.common.Serializers;
+import ru.otus.homework.messagesystem.common.Serializers;
 import ru.otus.homework.dataBase.core.model.User;
 import ru.otus.homework.dataBase.core.service.DBServiceUser;
 import ru.otus.homework.messagesystem.Message;

@@ -1,4 +1,4 @@
-package ru.otus.homework.common;
+package ru.otus.homework.messagesystem.common;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

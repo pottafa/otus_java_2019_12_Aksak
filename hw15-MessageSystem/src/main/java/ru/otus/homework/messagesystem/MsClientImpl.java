@@ -2,7 +2,7 @@ package ru.otus.homework.messagesystem;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.otus.homework.common.Serializers;
+import ru.otus.homework.messagesystem.common.Serializers;
 
 import java.util.Map;
 import java.util.Objects;

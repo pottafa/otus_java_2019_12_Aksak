@@ -2,13 +2,11 @@ package ru.otus.homework.front.handlers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.otus.homework.common.Serializers;
 import ru.otus.homework.dataBase.core.model.User;
 import ru.otus.homework.front.FrontendService;
 import ru.otus.homework.messagesystem.Message;
 import ru.otus.homework.messagesystem.RequestHandler;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 

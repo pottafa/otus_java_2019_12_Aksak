@@ -2,7 +2,7 @@ package ru.otus.homework.front.handlers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.otus.homework.common.Serializers;
+import ru.otus.homework.messagesystem.common.Serializers;
 import ru.otus.homework.dataBase.core.model.User;
 import ru.otus.homework.front.FrontendService;
 import ru.otus.homework.messagesystem.Message;
