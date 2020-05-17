@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Admin panel</title>
+  <link href="/admin.css" rel="stylesheet">
+  <script src="/webjars/jquery/jquery.min.js"></script>
+  <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+  <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+  <script src="/adminPanel.js"></script>
+</head>
+<body>
+
+<div class="panel" >
+  <div class="save">
+
+    <div class="form">
+      <h4>Create user</h4>
+      <img th:src="@{/images/newuser.png}">
+      <form class="form" accept-charset="utf-8" >
+        <label>
+          login <br/>
+          <input id="login" class="form" type="text"  placeholder="login" required>
+        </label>
+        <br/>
+        <label>
+          password<br/>
+          <input id="password" class="form" type="text"   placeholder="password" required>
+        </label>
+        <br/>
+        <label>
+          name <br/>
+          <input id="name" class="form" type="text"   placeholder="name">
+        </label>
+        <br/>
+        <label>
+          age<br/>
+          <input id="age" class="form" type="number"   placeholder="age" min="18" max="120" value="18">
+        </label><br/>
+        <button class="btn btn-default" id="send" type="submit">Save</button>
+      </form>
+    </div>
+
+</div>
+
+<div id="show">
+  <h3>Users list</h3>
+  <table >
+    <thead>
+    <tr>
+      <th style="width: 5%">Login</th>
+      <th style="width: 5%">Password</th>
+      <th style="width: 5%">Name</th>
+      <th style="width: 5%">Age</th>
+    </tr>
+    </thead>
+    <tbody id="users" style="background-color: #FFA500">
+    <tr th:each="user : ${users}">
+      <td th:text="${user.login}"></td>
+      <td th:text="${user.password}"></td>
+      <td th:text="${user.name}"></td>
+      <td th:text="${user.age}"></td>
+
+    </tr>
+    </tbody>
+  </table>
+</div>
+</div>
+</body>
+</html>

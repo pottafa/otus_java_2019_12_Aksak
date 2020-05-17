@@ -28,6 +28,7 @@
     <module>hw12-WebServer</module>
     <module>hw13-DependencyInjection</module>
     <module>hw14-SequenceOfNumbers</module>
+    <module>hw15-MessageSystem</module>
   </modules>
 
   <properties>
@@ -40,6 +41,13 @@
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>2.2.6.RELEASE</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
