@@ -9,9 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import ru.otus.frontend.front.FrontendService;
 import ru.otus.common.model.*;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-
 @Controller
 public class AdminPanelController {
     private static final String ADMIN_PANEL_TEMPLATE = "admin-panel";
@@ -25,7 +22,6 @@ public class AdminPanelController {
 
     @GetMapping("/admin-panel")
     protected String allUsersView(Model model) {
-   //     frontendService.getAllUsersData(consumer -> messagingTemplate.convertAndSend("/topic/getUsers", consumer));
         return ADMIN_PANEL_TEMPLATE;
     }
 
@@ -35,8 +31,8 @@ public class AdminPanelController {
     }
 
     @SubscribeMapping("/getUsers")
-    public void users() {
-        frontendService.getAllUsersData(consumer -> messagingTemplate.convertAndSend("/topic/getUsers", consumer));
+    public void getUsers() {
+        frontendService.getAllUsersData(usersList -> messagingTemplate.convertAndSend("/topic/getUsers", usersList));
     }
 
 

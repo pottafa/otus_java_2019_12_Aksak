@@ -8,13 +8,17 @@ function connect() {
         { showUsers(JSON.parse(user.body).age, JSON.parse(user.body).name, JSON.parse(user.body).login, JSON.parse(user.body).password);
         });
 
-        stompClient.subscribe('/topic/getUsers', function (users)
+        stompClient.subscribe('/app/getUsers', function (users)
                 {
-                showUsers(44, "sfsgfdwe", "aleeee", "safdhsug");
-                 $.each(users, function(i, f) {
-                           showUsers(JSON.parse(f.body).age, JSON.parse(f.body).name, JSON.parse(f.body).login, JSON.parse(f.body).password);
-                          });
                 });
+         stompClient.subscribe('/topic/getUsers', function (users)
+                         {
+                         var users_list = JSON.parse(users.body);
+                         showUsers(44, "sfsgfdwe", "aleeee", "safdhsug");
+                          $.each(users_list, function(i, user) {
+                                    showUsers(user.age, user.name, user.login, user.password);
+                                   });
+                         });
     });
 }
 
