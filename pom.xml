@@ -29,6 +29,7 @@
     <module>hw13-DependencyInjection</module>
     <module>hw14-SequenceOfNumbers</module>
     <module>hw15-MessageSystem</module>
+      <module>hw16-MessageServer</module>
   </modules>
 
   <properties>
