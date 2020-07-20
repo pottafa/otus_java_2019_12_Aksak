@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class GetAllUsersData implements RequestHandler {
-  DBServiceUser dbService;
+  private final DBServiceUser dbService;
 
   public GetAllUsersData(DBServiceUser dbService) {
     this.dbService = dbService;

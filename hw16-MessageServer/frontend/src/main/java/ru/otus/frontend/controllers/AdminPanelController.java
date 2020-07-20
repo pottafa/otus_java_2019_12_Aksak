@@ -2,6 +2,7 @@ package ru.otus.frontend.controllers;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 public class AdminPanelController {
     private static final String ADMIN_PANEL_TEMPLATE = "admin-panel";
     private final FrontendService frontendService;
-    private SimpMessagingTemplate messagingTemplate;
+    private final SimpMessagingTemplate messagingTemplate;
 
     public AdminPanelController(FrontendService frontendService, SimpMessagingTemplate messagingTemplate) {
         this.frontendService = frontendService;
@@ -24,15 +25,18 @@ public class AdminPanelController {
 
     @GetMapping("/admin-panel")
     protected String allUsersView(Model model) {
-        CompletableFuture<List<User>> future = new CompletableFuture<>();
-        frontendService.getAllUsersData(future::complete);
-        model.addAttribute("users", future.join());
+   //     frontendService.getAllUsersData(consumer -> messagingTemplate.convertAndSend("/topic/getUsers", consumer));
         return ADMIN_PANEL_TEMPLATE;
     }
 
     @MessageMapping("/new_user")
     public void newUser(User user) {
         frontendService.saveUserData(user, consumer -> messagingTemplate.convertAndSend("/topic/newUser", user));
+    }
+
+    @SubscribeMapping("/getUsers")
+    public void users() {
+        frontendService.getAllUsersData(consumer -> messagingTemplate.convertAndSend("/topic/getUsers", consumer));
     }
 
 

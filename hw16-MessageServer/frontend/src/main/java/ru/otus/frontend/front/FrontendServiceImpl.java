@@ -6,12 +6,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import ru.otus.common.ms.MessageType;
-import ru.otus.common.ms.MsClient;
 
 import ru.otus.common.model.*;
 import ru.otus.common.ms.Message;
-import ru.otus.frontend.FrontendMsClient;
-import ru.otus.frontend.FrontendSocketClient;
+import ru.otus.common.ms.MsClient;
 
 
 import java.util.List;
@@ -26,10 +24,10 @@ public class FrontendServiceImpl implements FrontendService {
     private static final Logger logger = LoggerFactory.getLogger(FrontendServiceImpl.class);
 
     private final Map<UUID, Consumer<?>> consumerMap = new ConcurrentHashMap<>();
-    private FrontendMsClient frontendMsClient;
+    private final MsClient frontendMsClient;
     private final String databaseServiceClientName;
 
-    public FrontendServiceImpl(@Value("${database_service_client_name}") String databaseServiceClientName, @Lazy FrontendMsClient frontendMsClient) {
+    public FrontendServiceImpl(@Value("${database_service_client_name}") String databaseServiceClientName, @Lazy MsClient frontendMsClient) {
         this.databaseServiceClientName = databaseServiceClientName;
         this.frontendMsClient = frontendMsClient;
     }

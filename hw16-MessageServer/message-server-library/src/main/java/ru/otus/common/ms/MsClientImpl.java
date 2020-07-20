@@ -15,8 +15,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class MsClientImpl implements MsClient {
     private final Map<String, RequestHandler> handlers = new ConcurrentHashMap<>();
     private static Logger logger = LoggerFactory.getLogger(MsClientImpl.class);
-    private String name;
-    private SocketClient socketClient;
+    private final String name;
+    private final SocketClient socketClient;
 
     public MsClientImpl(String name, SocketClient socketClient) {
         this.name = name;

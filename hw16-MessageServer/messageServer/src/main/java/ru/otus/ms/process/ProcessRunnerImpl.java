@@ -42,6 +42,7 @@ public class ProcessRunnerImpl implements ProcessRunner {
                 String line;
                 logger.info("Process started: {}", process.isAlive());
                 while ((line = bufferedReader.readLine()) != null) {
+                    System.out.println(line);
                 }
             } catch (IOException e) {
                 e.printStackTrace();

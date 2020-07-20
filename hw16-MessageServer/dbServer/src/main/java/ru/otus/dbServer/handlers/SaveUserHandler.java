@@ -12,7 +12,7 @@ import ru.otus.dbServer.core.service.DBServiceUser;
 import java.util.Optional;
 
 public class SaveUserHandler implements RequestHandler {
-  DBServiceUser dbService;
+  private final DBServiceUser dbService;
 
   public SaveUserHandler(DBServiceUser dbService) {
     this.dbService = dbService;

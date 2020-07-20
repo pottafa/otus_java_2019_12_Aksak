@@ -5,6 +5,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import ru.otus.common.socket.SocketClient;
 
 import java.io.IOException;
 
@@ -13,7 +14,7 @@ import java.io.IOException;
 public class DbApp implements ApplicationRunner {
 
     @Autowired
-    private DbSocketClient client;
+    private SocketClient client;
 
     public static void main(String[] args) {
         SpringApplication.run(DbApp.class, args);
